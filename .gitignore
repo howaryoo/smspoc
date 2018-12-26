@@ -1,0 +1,27 @@
+# general things to ignore
+.DS_Store
+build/
+dist/
+*.egg-info/
+*.egg
+*.py[cod]
+__pycache__/
+*.so
+*~
+geckodriver.log
+.pytest_cache
+input.csv
+
+# due to using tox and pytest
+.tox
+.cache
+
+output/
+report
+
+
+.idea/
+.vscode/
+
+.env
+.coverage

@@ -1,0 +1,47 @@
+version: '3.7'
+
+# Services
+services:
+
+  rabbit:
+    hostname: rabbit
+    build:
+      context: ./docker/rabbit
+    environment:
+        - RABBITMQ_DEFAULT_USER=admin
+        - RABBITMQ_DEFAULT_PASS=admin
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "5672"]
+
+
+  arangodb:
+    build: 'docker/arangodb'
+    ports:
+        - "8529:8529"
+    environment:
+        ARANGO_ROOT_PASSWORD: "root"
+        ARANGO_INIT_DB: "SMS"
+        ARANGO_INIT_COLLECTIONS: "User;Token;Message"
+
+
+  sms:
+    build: .
+    env_file:
+      - docker/COMPOSE.env
+    ports:
+      - "5000:5000"
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:5000"]
+        interval: 10s
+        timeout: 10s
+        retries: 3
+
+  sms-listener:
+    image: sms:latest
+    env_file:
+      - docker/COMPOSE.env
+    working_dir: /home/developer/sms/consumer
+    command: ./consume_sms.py

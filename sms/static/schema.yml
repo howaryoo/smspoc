@@ -1,0 +1,131 @@
+info: {title: SMS, version: '1.0'}
+openapi: '3.0.0'
+
+components:
+  parameters: {}
+  schemas:
+    Any:
+      type: array
+      items: {}
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - auth
+      summary: Register new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                  required: true
+                password:
+                  type: string
+                  required: true
+                mobile:
+                  type: string
+                  required: true
+
+            example:
+              login: name@example.org
+              password: secret
+              mobile: 51466677899
+      responses:
+        200:
+          description: OK
+        400:
+          description: KO
+
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: User login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                  required: true
+                password:
+                  type: string
+                  required: true
+
+            example:
+              login: name@example.org
+              password: secret
+      responses:
+        200:
+          description: OK
+        400:
+          description: KO
+
+  /auth/verify:
+    post:
+      tags:
+        - auth
+      summary: Check SMS code
+      parameters:
+        - in: header
+          name: sms-token
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                confirmation:
+                  type: string
+                  required: true
+            example:
+              confirmation: 1234
+      responses:
+        200:
+          description: OK
+        400:
+          description: KO
+
+  /sms/queue:
+    post:
+      tags:
+        - sms
+      summary: publish SMS to queue
+      parameters:
+        - in: header
+          name: sms-token
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                to:
+                  type: string
+                  required: true
+                message:
+                  type: string
+                  required: true
+      responses:
+        200:
+          description: OK
+        400:
+          description: KO
+
+
+tags:
+  - name: auth
+  - name: sms
+
