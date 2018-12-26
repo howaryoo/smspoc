@@ -50,8 +50,7 @@ COPY requirements.txt .
 # RUN while read requirement; do conda install --yes $requirement; done < requirements.txt
 ENV PATH /home/developer/.conda/envs/${PROJECT}/bin:$PATH
 RUN pip install -r requirements.txt
-#COPY --chown=developer:developer sms sms/
-COPY sms /home/developer/sms/
+COPY --chown=developer:developer sms /home/developer/sms/
 
 WORKDIR /home/developer/sms
 COPY log.ini ./log.ini
